@@ -88,7 +88,7 @@
       "request": {
         "method": "DELETE",
         "header": [],
-        "url": "http://18.222.97.169/users/user2",
+        "url": "https://avcloud-node.herokuapp.com/users/user2",
         "description": "delete a user with user_name"
       },
       "response": []
