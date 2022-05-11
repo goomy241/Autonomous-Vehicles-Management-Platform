@@ -51,7 +51,7 @@
             }
           }
         },
-        "url": "http://18.220.171.160/users",
+        "url": "https://avcloud-node.herokuapp.com/users",
         "description": "add a new user"
       },
       "response": []
