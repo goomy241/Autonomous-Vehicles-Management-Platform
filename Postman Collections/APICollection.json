@@ -14,7 +14,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": "http://18.220.171.160/test",
+        "url": "https://avcloud-node.herokuapp.com/test",
         "description": "test API is alive"
       },
       "response": []
@@ -134,7 +134,7 @@
             }
           }
         },
-        "url": "http://18.220.171.160/users/user1"
+        "url": "http://18.222.97.169/users/user1"
       },
       "response": []
     }
