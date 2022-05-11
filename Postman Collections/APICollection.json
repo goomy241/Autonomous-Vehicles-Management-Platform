@@ -134,7 +134,7 @@
             }
           }
         },
-        "url": "http://18.222.97.169/users/user1"
+        "url": "https://avcloud-node.herokuapp.com/users/user1"
       },
       "response": []
     }
