@@ -9,13 +9,20 @@ app.use(
   })
 );
 
-app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5000');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
+// app.use(function (req, res, next) {
+//   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5000');
+//   res.setHeader('Access-Control-Allow-Origin', 'https://main.d14elnr7dmueya.amplifyapp.com');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
+//   next();
+// });
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "*");
+  res.header("Access-Control-Allow-Headers", "*"); 
   next();
 });
-
 
 app.get("/test", (req, res) => {
   res.json({ message: "API is alive" });

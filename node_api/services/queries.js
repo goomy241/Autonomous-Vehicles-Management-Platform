@@ -273,6 +273,18 @@ async function postBooking(booking, user_name){
 }
 
 
+async function getBookings(user_name){
+  const row = await db.query(
+    `SELECT * FROM bookings WHERE customer_name='${user_name}'`
+  );
+
+  const data = helper.emptyOrRows(row);
+
+  return {
+    data
+  }
+}
+
 // *********** TRIP ***********
 
 async function postStart(booking_id){
@@ -357,6 +369,7 @@ async function putEnd(invoice, booking_id){
   getAvailableCar,
   // getCarNearBy,
   postBooking,
+  getBookings,
   postStart,
   putPickup,
   putEnd
