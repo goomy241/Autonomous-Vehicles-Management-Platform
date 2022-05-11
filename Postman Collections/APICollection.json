@@ -74,7 +74,7 @@
             }
           }
         },
-        "url": "http://18.220.171.160/users/login",
+        "url": "https://avcloud-node.herokuapp.com/users/login",
         "description": "check user login credential"
       },
       "response": []
