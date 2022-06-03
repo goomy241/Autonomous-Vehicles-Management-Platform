@@ -35,7 +35,7 @@ export default function AdminLogin() {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(user);
+   
 
     axios.post("https://avcloud-node.herokuapp.com/admins/login",user)
     .then(response=>{
