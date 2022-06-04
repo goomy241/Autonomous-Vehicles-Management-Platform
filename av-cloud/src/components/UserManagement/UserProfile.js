@@ -9,12 +9,15 @@ import {
   Spinner,
 } from "react-bootstrap";
 import axios from "axios";
+import NavBar from "../NavigationBar";
+import InProgressRideList from "../rides/InProgressRideList";
 
 const UserProfile = (props) => {
   const [userDetails, setUserDetails] = useState(null);
   const [userInfo, setUserInfo] = useState({});
-  const [userBookings, setUserBookings] = useState();
+  const [userBookings, setUserBookings] = useState(null);
   const history = useHistory();
+  const user_bookings = [];
 
   useEffect(() => {
     const user = localStorage.getItem("user");
@@ -27,7 +30,7 @@ const UserProfile = (props) => {
       document.location.reload()
     }
    
-      axios.get(`http://localhost:3000/users/${JSON.parse(user).username}`)
+      axios.get(`https://avcloud-node.herokuapp.com/users/${JSON.parse(user).username}`)
           .then((res) => {
             if (res.status === 200) {
               console.log(res.data);
@@ -38,8 +41,8 @@ const UserProfile = (props) => {
             }
           });
 
-        axios.get("http://localhost:3000/bookings").then((res) => {
-          const user_bookings = [];
+        axios.get("https://avcloud-node.herokuapp.com/bookings").then((res) => {
+          
           if (res.status === 200) {
             for (let i = 0; i < res.data.data.length; i++) {
               if (res.data.data[i].customer_name == `${JSON.parse(user).username}`) {
@@ -60,6 +63,7 @@ const UserProfile = (props) => {
 
   return (
     <>
+    <NavBar/>
       {userDetails ? (
         <>
           <div
@@ -130,7 +134,7 @@ const UserProfile = (props) => {
                 ) : (
                   <>
                     <div>
-                      {console.log({ userBookings })}
+                      {console.log(userBookings )}
                       {userBookings?.map((item, index) => {
                         const isActive = item?.status !== "ACTIVE";
                         return (
@@ -215,6 +219,7 @@ const UserProfile = (props) => {
               </Col>
             </Col>
           </Row>
+          {userBookings && <InProgressRideList user_bookings={userBookings}/>}
         </>
       ) : (
         <div

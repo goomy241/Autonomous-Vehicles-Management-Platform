@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Bar } from "react-chartjs-2";
+import { Bar, Doughnut, Line } from "react-chartjs-2";
 import { Chart } from "chart.js/auto";
 
 import {
@@ -16,10 +16,11 @@ import axios from "axios";
 import AdminNavBar from "./AdminNavigationBar";
 
 const AdminDashboardChart = () => {
-  const [bookings, setBookings] = useState(null);
+  const [bookings, setBookings] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
   const [chartData, setChartData] = useState(null);
   const history = useHistory();
+
 
   useEffect(() => {
     const user = localStorage.getItem("admin");
@@ -31,21 +32,27 @@ const AdminDashboardChart = () => {
       document.location.reload();
     }
 
-    axios.get("http://localhost:3000/bookings").then((res) => {
+    axios.get("https://avcloud-node.herokuapp.com/bookings").then((res) => {
       if (res.status === 200) {
         console.log(res.data.data);
         setBookings(res.data.data)
 
-
-        setTimeout(() => {
-            if (bookings!==null && bookings!== undefined) {
+            if (bookings!==null && bookings!== undefined && bookings.length!=0) {
+              
                 console.log(bookings);
+               const cleaned_bookings =  twoSum(bookings);
+               console.log(cleaned_bookings);
+               const final_cars = Object.keys(cleaned_bookings)
+               const final_bookings = Object.values(cleaned_bookings)
+
+               console.log(final_bookings,final_cars)
               setChartData({
-                labels: bookings?.map((booking) => booking.booking_id),
+                labels: Object.keys(cleaned_bookings),
+
                 datasets: [
                   {
-                    label: "Price in USD",
-                    data: bookings?.map((booking) => booking.b_car_id),
+                    label: "Number of cars per booking",
+                    data: Object.values(cleaned_bookings),
                     backgroundColor: [
                       "#ffbb11",
                       "#ecf0f1",
@@ -56,17 +63,41 @@ const AdminDashboardChart = () => {
                   },
                 ],
               });
+            //   console.log(chartData)
             }
             
-        }, 500);
-
        
       } else {
         console.log("Error happened!");
         document.location.reload();
       }
     });
-  }, []);
+  }, [bookings]);
+
+
+   function twoSum(bookings){
+    
+    const cars ={
+      
+      }
+      
+    
+    for ( let index=0;index<bookings.length;index++){
+      if (bookings[index].b_car_id in cars){
+        cars[bookings[index].b_car_id] +=1
+      
+
+    }
+    else{
+    cars[bookings[index].b_car_id] = 1
+    }
+  }
+  return cars;
+  
+};
+
+
+
 
   return (
     <div>
@@ -82,10 +113,11 @@ const AdminDashboardChart = () => {
           <Bar
             data={chartData}
             options={{
+                indexAxis:'y',
               plugins: {
                 title: {
                   display: true,
-                  text: "Cryptocurrency prices",
+                  text: "Cars per booking",
                 },
                 legend: {
                   display: true,

@@ -1,13 +1,14 @@
-import React, {useState, useEffect, useContext} from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { AuthContext } from '../authenticaion/ProvideAuth';
-import {fechInProgressRides} from '../../services/rideService';
+import React, { useState, useEffect, useContext } from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import axios from "axios";
+// import { AuthContext } from '../authenticaion/ProvideAuth';
+// import {fechInProgressRides} from '../../services/rideService';
 
 // function createData(rideNumber, carNumber, date,  charge) {
 //   return { rideNumber, carNumber, charge, date };
@@ -28,116 +29,120 @@ import {fechInProgressRides} from '../../services/rideService';
 
 // ];
 
-const InProgressRideList = props => {
-
-
-    const authContext = useContext(AuthContext);
-    const {user} = authContext;
-    const [inProgressRides, setInProgressRides] = useState([]);
-    const [loading, setLoading] = useState(true);
+const InProgressRideList = ({ user_bookings }) => {
+  const [inProgressRides, setInProgressRides] = useState([]);
+  const [loading, setLoading] = useState(true);
 
 
 
-    useEffect(() => {
-        getInProgressRides();
-    },[])
+  useEffect(() => {
+    console.log(user_bookings);
 
-    const getInProgressRides = async () => {
-        setLoading(true);
-        const {userId, persona} = user;
-        const resp = await fechInProgressRides(userId, persona);
-        if(resp.status === 200){
-            setInProgressRides(resp.data.payload);
-            setLoading(false);
-        }
-        else{
-            console.log(resp.data.message);
-        }
-    }
+    const rideList = []
 
-    //   const selectRide = (e) =>{
-    //     const {carId,model, chargePerDay } = JSON.parse(e.target.value);
-    //     console.log("Ride selected", JSON.parse(e.target.value));
-    //     const {setRide, ride} = props;
-    //     setRide({
-    //       ...ride,
-    //       carId,
-    //       model, 
-    //       chargePerDay,
-    //     })
-    //   }
 
-    //   const fetchCarList = async (type) => {
-    //     const resp = await fetchCarListFromDB(type);
-    //     console.log(resp);
-    //     if(resp.status === 200){
-    //       console.log(resp.data.payload);
-    //       const rows = [];
-    //       resp.data.payload.forEach(el => {
-    //         const { carId, ownerId, type, model, chargePerDay, mileage} = el;
-    //         rows.push({
-    //           carId,
-    //           ownerId, 
-    //           type, 
-    //           model,
-    //           chargePerDay, 
-    //           mileage,
-    //         })
-    //       });
-    //       setCarList(rows);
+  axios.get(`https://avcloud-mongo.herokuapp.com/states/8/102`)
+  .then((res)=>{
+      if (res.status===200){
+                    const { _id, Car_ID, Booking_ID, moving_state, car_loc_x, car_loc_y} = res.data;
+                    if (moving_state == 'forward'){
+                    rideList.push({
+                        _id, Car_ID, Booking_ID, moving_state, car_loc_x, car_loc_y
+                    })
+                }
+                  setInProgressRides(rideList);
 
-    //       setLoading(false);
-    //     }
-    //     else{
-    //       console.log(resp.data.message);
-    //     }
+          console.log(rideList)
+          setLoading(false)
+      }
+      else{
+          console.log('No rides in progress')
+      }
 
-    //   }
+  })
+}, []);
+  
 
-    return (
+  //   const selectRide = (e) =>{
+  //     const {carId,model, chargePerDay } = JSON.parse(e.target.value);
+  //     console.log("Ride selected", JSON.parse(e.target.value));
+  //     const {setRide, ride} = props;
+  //     setRide({
+  //       ...ride,
+  //       carId,
+  //       model,
+  //       chargePerDay,
+  //     })
+  //   }
+
+  //   const fetchCarList = async (type) => {
+  //     const resp = await fetchCarListFromDB(type);
+  //     console.log(resp);
+  //     if(resp.status === 200){
+  //       console.log(resp.data.payload);
+  //       const rows = [];
+  //       resp.data.payload.forEach(el => {
+  //         const { carId, ownerId, type, model, chargePerDay, mileage} = el;
+  //         rows.push({
+  //           carId,
+  //           ownerId,
+  //           type,
+  //           model,
+  //           chargePerDay,
+  //           mileage,
+  //         })
+  //       });
+  //       setCarList(rows);
+
+  //       setLoading(false);
+  //     }
+  //     else{
+  //       console.log(resp.data.message);
+  //     }
+
+  //   }
+
+  return (
+    <>
+      {!loading && (
         <>
-        {!loading && (
-        <>
-        {inProgressRides.length > 0 ? (
+          {inProgressRides.length>0 ? (
             <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
-                <TableRow>
+                  <TableRow>
                     <TableCell>Source</TableCell>
                     <TableCell align="right">Destination</TableCell>
                     <TableCell align="right">Car Number</TableCell>
                     <TableCell align="right">Status</TableCell>
-    
-                </TableRow>
+                  </TableRow>
                 </TableHead>
                 <TableBody>
-                {inProgressRides.map((row) => (
+                  {inProgressRides?.map((row) => (
                     <TableRow
-                    key={row.rideId}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      key={inProgressRides[0]._id}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                    <TableCell component="th" scope="row">
-                        {row.source}
-                    </TableCell>
-                    <TableCell align="right">{row.destination}</TableCell>
-                    <TableCell align="right">{row.carId}</TableCell>
-                    <TableCell style={{color:' green'}}align="right">{row.status}</TableCell>
-    
-    
+                      <TableCell component="th" scope="row">
+                        {row.moving_state}
+                      </TableCell>
+                      <TableCell align="right">{row.Booking_ID}</TableCell>
+                      <TableCell align="right">{row.Car_ID}</TableCell>
+                      <TableCell style={{ color: " green" }} align="right">
+                        {row.car_loc_x}
+                      </TableCell>
                     </TableRow>
-                ))}
+                  ))}
                 </TableBody>
-            </Table>
+              </Table>
             </TableContainer>
-        ) : (
+          ) : (
             <span>No Rides in Progress</span>
-        )
-        }
-        
+          )}
         </>
-        )}
-        </>
-    );
-}
+      )}
+    </>
+  );
+};
 
 export default InProgressRideList;

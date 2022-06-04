@@ -247,17 +247,43 @@ async function getAvailableCar(){
 async function postBooking(booking, user_name){
   const query = `INSERT INTO bookings (reserve_time, start_loc, destination_loc, customer_name, b_car_id)
     VALUES (?, ?, ?, ?, ?)`;
-  const result = await db.query( query, [new Date(), booking.start_loc, booking.destination_loc, user_name, booking.car_id]);
 
+  // ref: https://stackoverflow.com/questions/85116/display-date-time-in-users-locale-format-and-time-offset
+  var time = new Date();
+  time_local = new Date(time.getTime() - time.getTimezoneOffset() * 60000);
+  console.log(time);
+  console.log(time_local);
+  const result = await db.query( query, [time, booking.start_loc, booking.destination_loc, user_name, booking.car_id]);
+  var booking_id = null;
+  
   let message = 'Error in posting booking. ';
 
   if (result.affectedRows) {
     message = 'New booking posted successfully!';
+    var convert = time_local.toISOString().slice(0, 19).replace('T', ' ');
+    console.log(convert);
+    const buffer = await db.query(
+        `SELECT booking_id FROM bookings WHERE reserve_time = '${convert}'`
+    );
+    var jsonObj = Object.assign({}, buffer[0]);
+    booking_id = jsonObj.booking_id;
   }
 
-  return {message};
+  return {booking_id, message};
 }
 
+
+async function getBookings(user_name){
+  const row = await db.query(
+    `SELECT * FROM bookings WHERE customer_name='${user_name}'`
+  );
+
+  const data = helper.emptyOrRows(row);
+
+  return {
+    data
+  }
+}
 
 // *********** TRIP ***********
 
@@ -343,6 +369,7 @@ async function putEnd(invoice, booking_id){
   getAvailableCar,
   // getCarNearBy,
   postBooking,
+  getBookings,
   postStart,
   putPickup,
   putEnd

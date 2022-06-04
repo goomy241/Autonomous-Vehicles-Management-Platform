@@ -40,7 +40,7 @@ const AdminUsersList = () => {
     //         }
     //       });
 
-    axios.get("http://localhost:3000/users").then((res) => {
+    axios.get("https://avcloud-node.herokuapp.com/users").then((res) => {
       if (res.status === 200) {
         console.log(res.data.data);
 
@@ -58,7 +58,7 @@ const AdminUsersList = () => {
     console.log(event.target.value);
         const deleteUser = event.target.value
         
-        axios.delete(`http://localhost:3000/users/${deleteUser}`)
+        axios.delete(`https://avcloud-node.herokuapp.com/${deleteUser}`)
         .then((res) =>{
             if (res.status === 200){
                 console.log(res.data);
@@ -82,7 +82,7 @@ const AdminUsersList = () => {
       <AdminNavBar/>
         {users?.map((user) => (
           <Card style={{ margin: "2%"  }}>
-            <Card.Header>{user.user_name}<Button value={user.user_name} onClick={handleDelete} style={{float:'right'}}>Delete</Button></Card.Header>
+            <Card.Header><b>{user.user_name}</b><Button value={user.user_name} onClick={handleDelete} style={{float:'right'}}>Delete</Button></Card.Header>
             <Card.Body>
               <Card.Title> User ID : {user.user_id} </Card.Title>
               <Card.Text>

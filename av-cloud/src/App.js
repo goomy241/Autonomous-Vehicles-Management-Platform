@@ -14,6 +14,7 @@ import AdminCarsList from "./components/admin/AdminCarsList";
 import AdminNavBar from "./components/admin/AdminNavigationBar";
 import AddRides from "./components/admin/AddRides";
 import AdminDashboardChart from "./components/admin/AdminDashboardChart";
+import AdminBookingsList from "./components/admin/AdminBookingsList";
 
 function App() {
   return (
@@ -57,6 +58,9 @@ function App() {
 
           <Route exact path="/admin/dashboard/charts">
             <AdminDashboardChart />
+          </Route>
+          <Route exact path="/admin/dashboard/bookings">
+            <AdminBookingsList />
           </Route>
 
         </Switch>

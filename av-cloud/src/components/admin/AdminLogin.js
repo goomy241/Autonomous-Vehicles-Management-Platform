@@ -35,8 +35,10 @@ export default function AdminLogin() {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
+=======
+   
 
-    axios.post("http://localhost:3000/admins/login",user)
+    axios.post("https://avcloud-node.herokuapp.com/admins/login",user)
     .then(response=>{
     if (response.status == 200) {
       localStorage.setItem("admin", JSON.stringify(response.data));

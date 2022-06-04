@@ -4,6 +4,7 @@ import { Button, Card, Form, Row, Col } from "react-bootstrap";
 import { Link, Redirect, useHistory } from "react-router-dom";
 
 import axios from "axios";
+import NavBar from "../NavigationBar";
 
 export default function RegisterUser() {
   const history = useHistory();
@@ -39,7 +40,7 @@ export default function RegisterUser() {
     event.preventDefault();
     console.log(regUserdata);
 
-    axios.post("http://localhost:3000/users", regUserdata).then((response) => {
+    axios.post("https://avcloud-node.herokuapp.com/users", regUserdata).then((response) => {
       if (response.status == 200) {
         localStorage.setItem("user", JSON.stringify(response.data));
         setUserProfile(response.data);
@@ -70,6 +71,7 @@ export default function RegisterUser() {
       />
     ) : ( */}
       <React.Fragment>
+        <NavBar/>
         <Card
           style={{ width: "35rem", marginLeft: "25rem", marginTop: "2rem" }}
         >

@@ -3,6 +3,7 @@ import { Button, Card, Form, Row , Col} from "react-bootstrap";
 
 import { Link ,useHistory} from "react-router-dom";
 import axios from "axios";
+import NavBar from "../NavigationBar";
 
 
 
@@ -24,7 +25,7 @@ export default function UpdateUserInfo(){
         document.location.reload()
       }
      
-        axios.get(`http://localhost:3000/users/${JSON.parse(user).username}`)
+        axios.get(`https://avcloud-node.herokuapp.com/users/${JSON.parse(user).username}`)
             .then((res) => {
               if (res.status === 200) {
                 console.log(res.data);
@@ -47,7 +48,7 @@ export default function UpdateUserInfo(){
         event.preventDefault();
         console.log(regUserdata);
 
-        axios.put(`http://localhost:3000/users/${userInfo.username}`,regUserdata)
+        axios.put(`https://avcloud-node.herokuapp.com/users/${userInfo.username}`,regUserdata)
         .then(res=>{
             if (res.status==200){
                 console.log(res.data.message)
@@ -71,6 +72,7 @@ export default function UpdateUserInfo(){
 
 return(
   <React.Fragment>
+    <NavBar/>
 
       <Card style={{ width: '35rem', marginLeft:'25rem', marginTop:'2rem' }}>
           <Card.Header  style={{textAlign:'center', color:'green', fontStyle:"italic"}}>Update your profile</Card.Header>

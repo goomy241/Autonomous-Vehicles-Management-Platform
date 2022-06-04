@@ -204,6 +204,18 @@ router.post('/bookings/:user_name', async function(req, res, next) {
 });
 
 
+/* GET Booking History for one User */
+router.get('/bookings/:user_name', async function(req, res, next) {
+  var user_name = req.params.user_name;
+  console.log("**** GET **** Booking History ****");
+  try {
+    res.json(await queries.getBookings(user_name));
+  } catch (err) {
+    console.error(`Error getting information about booking history. `, err.message);
+    next(err);
+  }
+});
+
 // *********** Trip ***********
 
 router.post('/trip/start/:booking_id', async function(req, res, next) {

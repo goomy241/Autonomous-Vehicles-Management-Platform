@@ -48,7 +48,7 @@ export default function UpdateUserInfo(){
         event.preventDefault();
         console.log(carData);
 
-        axios.post('http://localhost:3000/cars',carData)
+        axios.post('https://avcloud-node.herokuapp.com/cars',carData)
         .then(res=>{
             if (res.status==200){
                 console.log(res.data.message)

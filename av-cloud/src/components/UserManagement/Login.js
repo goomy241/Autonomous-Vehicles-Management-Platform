@@ -5,6 +5,7 @@ import { Card, Form, Row, Col, Button } from "react-bootstrap";
 
 import axios from "axios";
 import { login } from "../../features/autheticationfeature";
+import NavBar from "../NavigationBar";
 
 export default function LoginForm() {
   const history = useHistory();
@@ -38,7 +39,7 @@ export default function LoginForm() {
     event.preventDefault();
     console.log(user);
 
-    axios.post("http://localhost:3000/users/login",user)
+    axios.post("https://avcloud-node.herokuapp.com/users/login",user)
     .then(response=>{
     if (response.status == 200) {
       localStorage.setItem("user", JSON.stringify(response.data));
@@ -69,6 +70,7 @@ export default function LoginForm() {
         />
       ) : ( */}
         <React.Fragment>
+          <NavBar/>
           <Row>
             <Col>
               <Card
