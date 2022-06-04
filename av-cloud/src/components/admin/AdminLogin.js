@@ -35,7 +35,6 @@ export default function AdminLogin() {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(user);
 
     axios.post("http://localhost:3000/admins/login",user)
     .then(response=>{
